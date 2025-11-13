@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -11,4 +12,9 @@ class Product extends Model
         'price',
         'description',
     ];
+
+     public static function getAllProducts()
+     {
+        return DB::table('products')->select('name', 'description', 'price')->get();
+     }
 }

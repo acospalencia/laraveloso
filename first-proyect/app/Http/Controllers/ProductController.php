@@ -12,7 +12,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return response()->json(
+            ['data' => $products,
+            'message' => 'Products retrieved successfully.',
+            'status' => 200
+        ], 200 );
     }
 
     /**
@@ -28,7 +33,12 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Product::create($request->all());
+        return response()->json(
+            ['data' => $product,
+                'message' => 'Product created succesfully',
+                'status' => 201
+            ], 201 );
     }
 
     /**
@@ -50,9 +60,26 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, string $Id)
     {
-        //
+        try {
+            
+            $product = Product::findOrFail($Id);
+
+            $product->update($request->all());
+            return response()->json([
+                'data' => $product,
+                'message' => 'Product updated successfully',
+                'status' => 200 
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error updating product',
+                'error' => $e->getMessage(),
+                'status' => 500 
+            ]. 500);
+        }
     }
 
     /**
